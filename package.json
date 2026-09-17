@@ -1,0 +1,22 @@
+{
+  "name": "bikechain",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Blockchain-Based Motorcycle History & Verification Platform",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "preview": "npm --prefix frontend run preview",
+    "install:frontend": "npm --prefix frontend install"
+  },
+  "keywords": [
+    "blockchain",
+    "solidity",
+    "motorcycle",
+    "verification",
+    "ethereum",
+    "web3"
+  ],
+  "author": "BikeChain Contributors",
+  "license": "MIT"
+}
