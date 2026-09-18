@@ -6,6 +6,8 @@ import LandingPage from './pages/LandingPage';
 import VerifyPage from './pages/VerifyPage';
 import BikeProfilePage from './pages/BikeProfilePage';
 import DashboardPage from './pages/DashboardPage';
+import BikesPage from './pages/BikesPage';
+import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 export default function App() {
@@ -17,9 +19,11 @@ export default function App() {
             <Route index element={<LandingPage />} />
             <Route path="verify" element={<VerifyPage />} />
             <Route path="verify/:bikeId" element={<VerifyPage />} />
+            <Route path="bikes" element={<BikesPage />} />
             <Route path="bike" element={<BikeProfilePage />} />
             <Route path="bike/:bikeId" element={<BikeProfilePage />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="about" element={<AboutPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>

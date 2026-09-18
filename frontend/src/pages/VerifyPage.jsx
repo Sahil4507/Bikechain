@@ -7,18 +7,17 @@ import {
   AlertTriangle, 
   ArrowRight, 
   Layers, 
-  QrCode, 
-  FileText, 
-  Gauge, 
   Calendar, 
-  UserCheck, 
-  ExternalLink,
-  Sparkles,
-  RefreshCw
+  User, 
+  Gauge, 
+  Hash, 
+  RefreshCw,
+  FileText,
+  HelpCircle
 } from 'lucide-react';
 import { getMotorcycleById, getAllMotorcycles } from '../data/mockBikes';
 import VerificationBadge from '../components/VerificationBadge';
-import { truncateAddress, truncateHash, formatOdometer, isValidBikeChainId } from '../utils/formatters';
+import { formatOdometer, truncateHash } from '../utils/formatters';
 
 export default function VerifyPage() {
   const { bikeId } = useParams();
@@ -33,7 +32,7 @@ export default function VerifyPage() {
       setSearchInput(bikeId);
       performVerification(bikeId);
     } else {
-      // Default to first bike for a rich preview if no ID in URL
+      // Default to initial demo record for instant illustration
       performVerification('BC-2026-RE-0001');
     }
   }, [bikeId]);
@@ -42,12 +41,12 @@ export default function VerifyPage() {
     setIsVerifying(true);
     setHasSearched(true);
 
-    // Simulate blockchain network query latency for authentic feel
+    // Realistic simulated network lookup (300ms)
     setTimeout(() => {
       const found = getMotorcycleById(idToVerify);
       setCurrentBike(found);
       setIsVerifying(false);
-    }, 450);
+    }, 300);
   };
 
   const handleSubmit = (e) => {
@@ -60,37 +59,37 @@ export default function VerifyPage() {
   const demoList = getAllMotorcycles();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
       
       {/* Search Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-mono font-medium">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tech-50 dark:bg-tech-950/60 text-tech-600 dark:text-tech-400 text-xs font-mono font-medium border border-tech-200 dark:border-tech-800">
           <ShieldCheck className="w-4 h-4" />
-          <span>Public Ledger Verification Hub</span>
+          <span>Vehicle Verification Portal</span>
         </div>
+        
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-          Verify Motorcycle History
+          Verify a Motorcycle
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-          Enter a unique BikeChain ID or select a demonstration record to inspect verified on-chain lifecycle records.
+        
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+          Enter a BikeChain ID to view its digital record and verification information.
         </p>
 
-        {/* Search Input Box */}
+        {/* Large Search Input */}
         <form onSubmit={handleSubmit} className="relative mt-6 max-w-xl mx-auto flex items-center">
-          <div className="absolute left-4 text-slate-400 pointer-events-none">
-            <Search className="w-5 h-5" />
-          </div>
+          <Search className="w-5 h-5 absolute left-4 text-slate-400 pointer-events-none" />
           <input
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Enter BikeChain ID (e.g. BC-2026-RE-0001)"
-            className="w-full pl-12 pr-32 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 font-mono text-sm focus:outline-none focus:border-amber-500 shadow-md transition-all"
+            className="w-full pl-12 pr-36 py-4 rounded-2xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 font-mono text-sm focus:outline-none focus:border-tech-500 shadow-sm transition-all"
           />
           <button
             type="submit"
             disabled={isVerifying}
-            className="absolute right-2 px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-all active:scale-95 disabled:opacity-50"
+            className="absolute right-2 px-5 py-2.5 rounded-xl bg-tech-600 hover:bg-tech-700 text-white font-bold text-xs flex items-center gap-1.5 transition-all active:scale-95 disabled:opacity-50"
           >
             {isVerifying ? (
               <>
@@ -99,16 +98,27 @@ export default function VerifyPage() {
               </>
             ) : (
               <>
-                <span>Verify</span>
+                <span>Verify Record</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </>
             )}
           </button>
         </form>
 
-        {/* Demo ID pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-xs text-slate-500 dark:text-slate-400">
-          <span className="text-[11px]">Available Demo IDs:</span>
+        {/* Educational Callout: What is a BikeChain ID? */}
+        <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-left max-w-xl mx-auto text-xs space-y-1">
+          <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
+            <HelpCircle className="w-3.5 h-3.5 text-tech-500" />
+            <span>What is a BikeChain ID?</span>
+          </div>
+          <p className="text-slate-500 dark:text-slate-400 text-[11px] leading-relaxed">
+            A unique identifier used to find a motorcycle's digital history, verify its current owner, and check recorded service documents.
+          </p>
+        </div>
+
+        {/* Demo ID Shortcuts */}
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs text-slate-500">
+          <span className="text-[11px]">Demo records:</span>
           {demoList.map(bike => (
             <button
               key={bike.id}
@@ -118,8 +128,8 @@ export default function VerifyPage() {
               }}
               className={`font-mono text-[11px] px-2.5 py-0.5 rounded-md border transition-all ${
                 currentBike?.id === bike.id
-                  ? 'bg-amber-500 text-slate-950 font-bold border-amber-500'
-                  : 'bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
+                  ? 'bg-tech-600 text-white font-bold border-tech-600'
+                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-tech-400'
               }`}
             >
               {bike.id}
@@ -128,221 +138,147 @@ export default function VerifyPage() {
         </div>
       </div>
 
-      {/* Verification Result State */}
+      {/* Verification Result Area */}
       {isVerifying ? (
-        <div className="p-16 text-center space-y-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 max-w-2xl mx-auto shadow-sm">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto animate-spin">
-            <RefreshCw className="w-6 h-6" />
-          </div>
+        <div className="p-12 text-center rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 max-w-xl mx-auto space-y-3">
+          <RefreshCw className="w-8 h-8 text-tech-600 animate-spin mx-auto" />
           <h3 className="text-base font-bold text-slate-900 dark:text-white font-mono">
-            Querying Ethereum Blockchain...
+            Searching Digital Registry...
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Validating contract state root, cryptographic hashes, and ownership sequence.
-          </p>
+          <p className="text-xs text-slate-500">Comparing cryptographic hash and ownership sequence.</p>
         </div>
       ) : currentBike ? (
         <div className="space-y-6">
           
-          {/* Main Verified Card */}
-          <div className="rounded-3xl bg-white dark:bg-slate-900 border-2 border-emerald-500/30 dark:border-emerald-500/20 shadow-xl overflow-hidden">
+          {/* Main Clean Verification Card (NO PHOTO) */}
+          <div className="rounded-3xl bg-white dark:bg-slate-900 border-2 border-emerald-500/40 dark:border-emerald-500/30 shadow-elevated p-6 sm:p-8 space-y-6">
             
-            {/* Top Verification Status Bar */}
-            <div className="bg-emerald-500/10 border-b border-emerald-500/20 px-6 py-3 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                <span className="text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-400">
-                  Cryptographic Record Confirmed on Chain
-                </span>
+            {/* Status Header Banner */}
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold text-sm sm:text-base">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                <span>✓ RECORD FOUND & VERIFIED</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-500 font-semibold">
-                  Integrity Score: {currentBike.verificationScore}%
+                <span className="text-xs font-mono px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 font-bold text-slate-800 dark:text-slate-200">
+                  {currentBike.id}
                 </span>
-                <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-[10px] font-mono font-bold uppercase">
-                  Tamper-Free
-                </span>
+                <VerificationBadge status={currentBike.status} size="sm" />
               </div>
             </div>
 
-            {/* Bike Identity & Specs */}
-            <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+            {/* Vehicle Main Attributes */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
-              {/* Image & Quick QR */}
               <div className="space-y-4">
-                <div className="relative rounded-2xl overflow-hidden bg-slate-950 aspect-[16/10] border border-slate-200 dark:border-slate-800">
-                  <img
-                    src={currentBike.image}
-                    alt={`${currentBike.manufacturer} ${currentBike.model}`}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg font-mono text-xs text-amber-400 font-bold">
-                    {currentBike.id}
-                  </div>
-                </div>
-
-                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
-                  <span className="flex items-center gap-2 text-slate-600 dark:text-slate-300 font-semibold">
-                    <QrCode className="w-4 h-4 text-amber-500" />
-                    Public Verification URL
-                  </span>
-                  <span className="font-mono text-[11px] text-amber-600 dark:text-amber-400">
-                    /verify/{currentBike.id}
-                  </span>
-                </div>
-              </div>
-
-              {/* Specs & Attributes */}
-              <div className="lg:col-span-2 space-y-6">
                 <div>
-                  <div className="flex items-center gap-2 text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1">
-                    <span>{currentBike.manufacturer}</span>
-                    <span>•</span>
-                    <span>{currentBike.year}</span>
-                    <span>•</span>
-                    <span>{currentBike.type}</span>
-                  </div>
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+                  <span className="text-xs font-bold uppercase tracking-wider text-tech-600 dark:text-tech-400">
+                    {currentBike.manufacturer} • {currentBike.category}
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-0.5">
                     {currentBike.model}
                   </h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Engine: <span className="font-semibold text-slate-700 dark:text-slate-300">{currentBike.engineCapacity}</span> | Color: <span className="font-semibold text-slate-700 dark:text-slate-300">{currentBike.color}</span>
-                  </p>
                 </div>
 
-                {/* 4-Box Verification Checklist */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">Identity Verified</h4>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                        VIN hash matches factory digital mint.
-                      </p>
-                    </div>
+                <div className="space-y-2 text-xs">
+                  {/* Production Year Clearly Highlighted */}
+                  <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800">
+                    <span className="text-slate-500 font-medium flex items-center gap-1.5">
+                      <Calendar className="w-4 h-4 text-tech-500" />
+                      <span>Production Year</span>
+                    </span>
+                    <span className="font-mono font-bold text-slate-900 dark:text-white text-sm">
+                      {currentBike.productionYear}
+                    </span>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">Blockchain Record</h4>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                        Block #{currentBike.blockchain.blockNumber} confirmed.
-                      </p>
-                    </div>
+                  {/* Current Owner */}
+                  <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800">
+                    <span className="text-slate-500 font-medium flex items-center gap-1.5">
+                      <User className="w-4 h-4 text-tech-500" />
+                      <span>Current Owner</span>
+                    </span>
+                    <span className="font-semibold text-slate-900 dark:text-white">
+                      {currentBike.currentOwner?.name}
+                    </span>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">Ownership Traceable</h4>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                        {currentBike.ownershipHistory.length} sequential transfer logs found.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">Mileage Integrity</h4>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                        Logged at {formatOdometer(currentBike.currentOdometer, currentBike.unit)}.
-                      </p>
-                    </div>
+                  {/* Logged Mileage */}
+                  <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800">
+                    <span className="text-slate-500 font-medium flex items-center gap-1.5">
+                      <Gauge className="w-4 h-4 text-tech-500" />
+                      <span>Recorded Mileage</span>
+                    </span>
+                    <span className="font-mono font-bold text-slate-900 dark:text-white">
+                      {formatOdometer(currentBike.currentOdometer, currentBike.unit)}
+                    </span>
                   </div>
                 </div>
-
-                {/* Primary Actions */}
-                <div className="pt-2 flex flex-wrap items-center gap-3">
-                  <Link
-                    to={`/bike/${currentBike.id}`}
-                    className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all active:scale-95"
-                  >
-                    <span>View Full Motorcycle Profile</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                  <a
-                    href="#blockchain-proof"
-                    className="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs sm:text-sm transition-all"
-                  >
-                    Inspect Blockchain Hash
-                  </a>
-                </div>
-
               </div>
+
+              {/* Cryptographic Hash Verification Box */}
+              <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-4 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs mb-2">
+                    <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <Hash className="w-4 h-4 text-tech-500" />
+                      <span>Document Fingerprint (SHA-256)</span>
+                    </span>
+                    <span className="text-emerald-600 font-bold font-mono text-[11px]">VALID MATCH</span>
+                  </div>
+
+                  <p className="text-[11px] text-slate-500 leading-relaxed mb-3">
+                    The SHA-256 hash of invoice <code className="font-mono text-slate-700 dark:text-slate-300 font-semibold">{currentBike.sampleInvoiceName}</code> matches the on-chain stored fingerprint.
+                  </p>
+
+                  <div className="p-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 font-mono text-xs text-slate-700 dark:text-slate-300 break-all select-all">
+                    {currentBike.storedDocumentHash}
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+                  <span>Architecture Status:</span>
+                  <span className="font-mono font-semibold text-tech-600 dark:text-tech-400">
+                    Phase 3 Prototype Model
+                  </span>
+                </div>
+              </div>
+
             </div>
 
-            {/* Blockchain Details Section */}
-            <div id="blockchain-proof" className="bg-slate-50 dark:bg-slate-950/70 border-t border-slate-200 dark:border-slate-800 p-6 sm:p-8 space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-amber-500" />
-                  On-Chain Cryptographic Proof
-                </span>
-                <span className="text-xs font-mono px-2.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold">
-                  {currentBike.blockchain.network}
-                </span>
+            {/* Bottom Action */}
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4">
+              <div className="text-xs text-slate-500">
+                <span>Registration Number: </span>
+                <strong className="font-mono text-slate-900 dark:text-white">{currentBike.registrationNumber}</strong>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-                <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
-                  <span className="text-[10px] text-slate-400 block uppercase">Smart Contract Address</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200 break-all">
-                    {currentBike.blockchain.contractAddress}
-                  </span>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
-                  <span className="text-[10px] text-slate-400 block uppercase">Registration Transaction Hash</span>
-                  <span className="font-semibold text-amber-600 dark:text-amber-400 break-all">
-                    {currentBike.blockchain.registrationTxHash}
-                  </span>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
-                  <span className="text-[10px] text-slate-400 block uppercase">Current Registered Owner</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200 break-all">
-                    {currentBike.currentOwner?.walletAddress} ({currentBike.currentOwner?.nameMasked})
-                  </span>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
-                  <span className="text-[10px] text-slate-400 block uppercase">Merkle Document Root (Off-Chain Invoices)</span>
-                  <span className="font-semibold text-cyan-600 dark:text-cyan-400 break-all">
-                    {currentBike.blockchain.merkleRoot}
-                  </span>
-                </div>
-              </div>
+              <Link
+                to={`/bike/${currentBike.id}`}
+                className="px-6 py-3 rounded-xl bg-tech-600 hover:bg-tech-700 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-sm transition-all"
+              >
+                <span>View Full Record Passport</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
 
           </div>
 
         </div>
       ) : hasSearched ? (
-        /* Not Found State */
-        <div className="p-12 text-center rounded-3xl bg-white dark:bg-slate-900 border border-rose-500/30 max-w-xl mx-auto space-y-4 shadow-md">
-          <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center mx-auto">
-            <AlertTriangle className="w-6 h-6" />
-          </div>
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-            Motorcycle Record Not Found
-          </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            No smart contract record was found for BikeChain ID <span className="font-mono text-rose-500 font-bold">{searchInput}</span>. 
-            Ensure you typed the exact formatted ID (e.g. <code className="font-mono text-amber-500">BC-2026-RE-0001</code>).
+        <div className="p-10 text-center rounded-3xl bg-white dark:bg-slate-900 border border-rose-300 dark:border-rose-900/60 max-w-xl mx-auto space-y-4">
+          <AlertTriangle className="w-10 h-10 text-rose-500 mx-auto" />
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">Record Not Found</h3>
+          <p className="text-xs text-slate-500 leading-relaxed">
+            No digital vehicle passport was found for ID <code className="font-mono text-rose-500 font-bold">{searchInput}</code>.
+            Please verify the exact format (e.g. <code className="font-mono text-tech-600">BC-2026-RE-0001</code>).
           </p>
-          <div className="pt-2">
-            <button
-              onClick={() => {
-                setSearchInput('BC-2026-RE-0001');
-                navigate('/verify/BC-2026-RE-0001');
-              }}
-              className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 transition-colors"
-            >
-              Load Royal Enfield Sample Record
-            </button>
-          </div>
+          <button
+            onClick={() => { setSearchInput('BC-2026-RE-0001'); navigate('/verify/BC-2026-RE-0001'); }}
+            className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 transition-colors"
+          >
+            Load Sample Record (BC-2026-RE-0001)
+          </button>
         </div>
       ) : null}
 
