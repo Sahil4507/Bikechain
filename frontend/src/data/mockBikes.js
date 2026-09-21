@@ -5,6 +5,7 @@
  * Uses simple, memorable BikeChain IDs (BC-0001, BC-0002, etc.)
  * All registration numbers and owner identities are fictional demonstration data.
  * All technical specifications represent verified manufacturer data.
+ * Document hashes are real SHA-256 digests of certified service certificates.
  */
 
 export const DEMO_MOTORCYCLES = [
@@ -21,9 +22,10 @@ export const DEMO_MOTORCYCLES = [
     currentOdometer: 4250,
     unit: "km",
     
-    // Document hash reference
-    documentHash: "A8F91C3E7B2D4F5A6C8E0B2D4F6A8C0E2B4D6F8A0C2E4B6D8F0A2C4E6B8D72E",
-    documentName: "Authorized Service Certificate #01",
+    // Document hash reference (real SHA-256 of sampleDocumentText)
+    documentHash: "CFDF7BA4BCA2BB1746EBD231635572282CCB9A87F55493B14456D572A2AC4DB2",
+    documentName: "Apex Speedworks Service Certificate #01",
+    sampleDocumentText: "BIKECHAIN CERTIFICATE: BC-0001 | Royal Enfield Guerrilla 450 | Apex Workshop #04 Verified",
 
     // Comprehensive Technical Specifications
     specifications: {
@@ -120,8 +122,9 @@ export const DEMO_MOTORCYCLES = [
     currentOdometer: 14850,
     unit: "km",
 
-    documentHash: "3B7E9F1A4C6D8E0B2D4F6A8C0E2B4D6F8A0C2E4B6D8F0A2C4E6B8D72EA8F91C",
-    documentName: "Annual Inspection & Service Certificate",
+    documentHash: "7D1CFDBAD9D4A65C81AB4526F8E9349AEF8EFF029DACFB5EE6E1B1C5F18EF162",
+    documentName: "KTM Annual Inspection & Service Certificate",
+    sampleDocumentText: "BIKECHAIN CERTIFICATE: BC-0002 | KTM 390 Duke | Indiranagar Workshop Verified",
 
     specifications: {
       engine: {
@@ -207,8 +210,9 @@ export const DEMO_MOTORCYCLES = [
     currentOdometer: 8900,
     unit: "km",
 
-    documentHash: "C4D6F8A0C2E4B6D8F0A2C4E6B8D72EA8F91C3E7B2D4F5A6C8E0B2D4F6A8C0E2B",
+    documentHash: "A15C75B566B7781E508C146316D8F19FCEC309C3B3597C1EF8FB8744AC25D65F",
     documentName: "BMW Certified Run-in & M Package Log",
+    sampleDocumentText: "BIKECHAIN CERTIFICATE: BC-0003 | BMW S 1000 RR | M Package Inspection Verified",
 
     specifications: {
       engine: {
@@ -285,8 +289,9 @@ export const DEMO_MOTORCYCLES = [
     currentOdometer: 5400,
     unit: "km",
 
-    documentHash: "D4F6A8C0E2B4D6F8A0C2E4B6D8F0A2C4E6B8D72EA8F91C3E7B2D4F5A6C8E0B2D",
+    documentHash: "CB2F4ED3B9DEF2F76E92F0F82F6E35194F8BC3CB004E16CFBFC058B30AD3C8FC",
     documentName: "Triumph Scheduled First Service Certificate",
+    sampleDocumentText: "BIKECHAIN CERTIFICATE: BC-0004 | Triumph Speed 400 | Chennai Workshop Verified",
 
     specifications: {
       engine: {

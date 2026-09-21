@@ -1,8 +1,14 @@
 /**
- * In-browser SHA-256 cryptographic utility for demonstration & viva presentation.
- * Uses the native Web Cryptography API (window.crypto.subtle).
+ * In-browser SHA-256 cryptographic utility for BikeChain.
+ * Computes exact SHA-256 cryptographic digests of text and files
+ * using the browser-native Web Cryptography API (window.crypto.subtle).
  */
 
+/**
+ * Compute SHA-256 hash of a string.
+ * @param {string} text 
+ * @returns {Promise<string>} 64-character uppercase hex hash
+ */
 export async function computeSHA256(text) {
   if (!text) return '';
   try {
@@ -10,11 +16,28 @@ export async function computeSHA256(text) {
     const data = encoder.encode(text);
     const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex.toUpperCase();
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
   } catch (error) {
     console.error('SHA-256 calculation error:', error);
-    // Fallback pseudo-hash if subtle crypto unavailable
-    return 'E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855';
+    return '';
+  }
+}
+
+/**
+ * Compute SHA-256 hash of a File or Blob.
+ * Hashes raw binary bytes consistently.
+ * @param {File|Blob} file 
+ * @returns {Promise<string>} 64-character uppercase hex hash
+ */
+export async function computeFileSHA256(file) {
+  if (!file) return '';
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const hashBuffer = await window.crypto.subtle.digest('SHA-256', arrayBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+  } catch (error) {
+    console.error('File SHA-256 calculation error:', error);
+    return '';
   }
 }

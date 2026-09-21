@@ -1,0 +1,29 @@
+{
+  "name": "blockchain",
+  "version": "1.0.0",
+  "description": "BikeChain Solidity Smart Contracts and Hardhat Test Suite",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "node test/test-contract.js",
+    "test:live": "node test/test-execution.js",
+    "deploy": "hardhat run scripts/deploy.js"
+  },
+  "keywords": [
+    "blockchain",
+    "solidity",
+    "hardhat",
+    "bikechain"
+  ],
+  "author": "Sahil4507",
+  "license": "MIT",
+  "dependencies": {
+    "ethers": "^6.16.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^7.0.0",
+    "@openzeppelin/contracts": "^5.6.1",
+    "hardhat": "^3.17.0"
+  }
+}

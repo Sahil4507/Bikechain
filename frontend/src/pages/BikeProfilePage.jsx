@@ -14,14 +14,27 @@ import {
   Zap,
   Maximize2,
   Disc,
-  Fuel
+  Fuel,
+  Upload,
+  CheckCircle2,
+  XCircle,
+  RotateCcw,
+  FileText
 } from 'lucide-react';
 import { getMotorcycleById } from '../data/mockBikes';
+import { computeSHA256, computeFileSHA256 } from '../utils/crypto';
 
 export default function BikeProfilePage() {
   const { bikeId } = useParams();
   const [copiedHash, setCopiedHash] = useState(false);
   const [activeSpecCategory, setActiveSpecCategory] = useState('all'); // 'all', 'engine', 'dimensions', 'chassis', 'efficiency'
+
+  // Interactive Document Verification State
+  const [verifyMode, setVerifyMode] = useState('text'); // 'text' | 'file'
+  const [inputText, setInputText] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [computedHash, setComputedHash] = useState('');
+  const [isComputingHash, setIsComputingHash] = useState(false);
 
   // Default to BC-0001 if /bike is accessed without a param
   const activeId = bikeId ? bikeId.trim() : 'BC-0001';
@@ -29,6 +42,10 @@ export default function BikeProfilePage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Reset verification state on motorcycle change
+    setInputText('');
+    setSelectedFile(null);
+    setComputedHash('');
   }, [bikeId]);
 
   if (!bike) {
@@ -61,6 +78,48 @@ export default function BikeProfilePage() {
       setTimeout(() => setCopiedHash(false), 2000);
     }
   };
+
+  const handleTextVerify = async (text) => {
+    setInputText(text);
+    if (!text.trim()) {
+      setComputedHash('');
+      return;
+    }
+    setIsComputingHash(true);
+    const hash = await computeSHA256(text);
+    setComputedHash(hash);
+    setIsComputingHash(false);
+  };
+
+  const handleFileVerify = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSelectedFile(file);
+    setIsComputingHash(true);
+    const hash = await computeFileSHA256(file);
+    setComputedHash(hash);
+    setIsComputingHash(false);
+  };
+
+  const handleLoadSample = async () => {
+    if (!bike?.sampleDocumentText) return;
+    setVerifyMode('text');
+    setSelectedFile(null);
+    setInputText(bike.sampleDocumentText);
+    setIsComputingHash(true);
+    const hash = await computeSHA256(bike.sampleDocumentText);
+    setComputedHash(hash);
+    setIsComputingHash(false);
+  };
+
+  const handleResetVerification = () => {
+    setInputText('');
+    setSelectedFile(null);
+    setComputedHash('');
+  };
+
+  const isMatch = Boolean(computedHash && bike?.documentHash && (computedHash.toUpperCase() === bike.documentHash.toUpperCase()));
+  const isMismatch = Boolean(computedHash && bike?.documentHash && (computedHash.toUpperCase() !== bike.documentHash.toUpperCase()));
 
   const specs = bike.specifications;
 
@@ -451,6 +510,181 @@ export default function BikeProfilePage() {
             </p>
           </div>
         )}
+
+        {/* ============================================================ */}
+        {/* Interactive Document Integrity Verifier (SHA-256) */}
+        {/* ============================================================ */}
+        <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                <FileCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                <span>Verify Document Integrity (SHA-256)</span>
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Hash any service invoice, title receipt, or warranty PDF locally in your browser and check against the recorded on-chain fingerprint.
+              </p>
+            </div>
+
+            {/* Clear Button */}
+            {(inputText || selectedFile || computedHash) && (
+              <button
+                type="button"
+                onClick={handleResetVerification}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors self-start sm:self-auto"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Clear</span>
+              </button>
+            )}
+          </div>
+
+          {/* Input Mode Selector */}
+          <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+            <button
+              type="button"
+              onClick={() => { setVerifyMode('text'); }}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${
+                verifyMode === 'text'
+                  ? 'bg-indigo-600 text-white shadow-xs'
+                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Paste Document Content</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => { setVerifyMode('file'); }}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${
+                verifyMode === 'file'
+                  ? 'bg-indigo-600 text-white shadow-xs'
+                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <Upload className="w-3.5 h-3.5" />
+              <span>Upload Document File</span>
+            </button>
+          </div>
+
+          {/* Mode 1: Paste Text */}
+          {verifyMode === 'text' && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label htmlFor="verify-text-input" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Document Text / Content
+                </label>
+                
+                {/* One-Click Sample Test Button for Viva Demonstrations */}
+                {bike.sampleDocumentText && (
+                  <button
+                    type="button"
+                    onClick={handleLoadSample}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-xs font-bold transition-colors"
+                  >
+                    <span>⚡ Test with Verified Sample Certificate</span>
+                  </button>
+                )}
+              </div>
+
+              <textarea
+                id="verify-text-input"
+                rows={3}
+                value={inputText}
+                onChange={(e) => handleTextVerify(e.target.value)}
+                placeholder="Paste certificate text, service report lines, or registration notes here to calculate live SHA-256..."
+                className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all resize-y"
+              />
+            </div>
+          )}
+
+          {/* Mode 2: Upload File */}
+          {verifyMode === 'file' && (
+            <div className="space-y-3">
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">
+                Select Local Document File (PDF, TXT, PNG, JPG)
+              </span>
+
+              <label className="flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500 bg-white dark:bg-slate-900/50 cursor-pointer transition-colors group">
+                <Upload className="w-8 h-8 text-slate-400 group-hover:text-indigo-600 transition-colors mb-2" />
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-indigo-600">
+                  {selectedFile ? selectedFile.name : 'Click to select document file for cryptographic hashing'}
+                </span>
+                <span className="text-[11px] text-slate-400 mt-1">
+                  {selectedFile 
+                    ? `${(selectedFile.size / 1024).toFixed(1)} KB — Click to choose different file` 
+                    : 'Browser calculates raw SHA-256 byte digest locally without uploading to any server'}
+                </span>
+                <input
+                  type="file"
+                  onChange={handleFileVerify}
+                  className="hidden"
+                />
+              </label>
+            </div>
+          )}
+
+          {/* Computed Hash Box */}
+          {computedHash && (
+            <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-slate-700 dark:text-slate-300">
+                  Computed SHA-256 Fingerprint:
+                </span>
+                {isComputingHash && (
+                  <span className="text-indigo-600 font-semibold animate-pulse">Calculating digest...</span>
+                )}
+              </div>
+              <code className="text-xs font-mono text-slate-800 dark:text-slate-200 break-all select-all block bg-slate-50 dark:bg-slate-950 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800">
+                {computedHash}
+              </code>
+            </div>
+          )}
+
+          {/* Verification Verdict Banner */}
+          {isMatch && (
+            <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 flex items-start gap-3">
+              <div className="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 mt-0.5">
+                <CheckCircle2 className="w-5 h-5" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
+                    MATCH — DOCUMENT VERIFIED
+                  </h4>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">
+                    100% Cryptographic Match
+                  </span>
+                </div>
+                <p className="text-xs text-emerald-900 dark:text-emerald-200/90 leading-relaxed">
+                  The computed SHA-256 hash matches the recorded document fingerprint exactly. This mathematically guarantees the document content is genuine, complete, and untampered.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {isMismatch && (
+            <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 flex items-start gap-3">
+              <div className="w-8 h-8 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0 mt-0.5">
+                <XCircle className="w-5 h-5" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-rose-800 dark:text-rose-300">
+                    MISMATCH — VERIFICATION FAILED
+                  </h4>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200">
+                    Digest Differs
+                  </span>
+                </div>
+                <p className="text-xs text-rose-900 dark:text-rose-200/90 leading-relaxed">
+                  The computed SHA-256 hash does not match the stored on-chain fingerprint for this motorcycle. This indicates either a different document was provided or the document has been modified after certification.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
 
       </section>
 
