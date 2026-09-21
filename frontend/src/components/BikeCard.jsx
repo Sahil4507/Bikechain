@@ -9,11 +9,22 @@ export default function BikeCard({ bike }) {
     <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 dark:hover:border-indigo-500/40 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
       <div className="space-y-4">
         
-        {/* Top Header: Brand, Production Year, and Status */}
+        {/* Top Header: Brand, Displacement, and Production Year */}
         <div className="flex items-center justify-between gap-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-            {bike.manufacturer}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+              {bike.manufacturer}
+            </span>
+            {bike.specifications?.engine?.displacement && (
+              <>
+                <span className="text-slate-300 dark:text-slate-700">•</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                  {bike.specifications.engine.displacement}
+                </span>
+              </>
+            )}
+          </div>
+
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-xs font-semibold">
             <Calendar className="w-3 h-3 text-slate-400" />
             <span>{bike.productionYear}</span>

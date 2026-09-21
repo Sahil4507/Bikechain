@@ -4,6 +4,7 @@
  * Simple, clean demonstration records for academic BCT project.
  * Uses simple, memorable BikeChain IDs (BC-0001, BC-0002, etc.)
  * All registration numbers and owner identities are fictional demonstration data.
+ * All technical specifications represent verified manufacturer data.
  */
 
 export const DEMO_MOTORCYCLES = [
@@ -16,7 +17,6 @@ export const DEMO_MOTORCYCLES = [
     registrationNumber: "MH 02 EQ 4091",
     status: "Verified Record",
     currentOwner: "Priya Nair",
-    engineCapacity: "452 cc",
     color: "Brava Blue",
     currentOdometer: 4250,
     unit: "km",
@@ -24,6 +24,38 @@ export const DEMO_MOTORCYCLES = [
     // Document hash reference
     documentHash: "A8F91C3E7B2D4F5A6C8E0B2D4F6A8C0E2B4D6F8A0C2E4B6D8F0A2C4E6B8D72E",
     documentName: "Authorized Service Certificate #01",
+
+    // Comprehensive Technical Specifications
+    specifications: {
+      engine: {
+        displacement: "452 cc",
+        engineType: "Single-cylinder, 4-stroke, 4-valve DOHC (Sherpa 450)",
+        maxPower: "40.02 PS (39.5 bhp / 29.4 kW) @ 8,000 rpm",
+        maxTorque: "40 Nm @ 5,500 rpm",
+        transmission: "6-speed manual with slip & assist clutch",
+        cooling: "Liquid-cooled",
+        fuelType: "Petrol / Gasoline"
+      },
+      dimensions: {
+        kerbWeight: "185 kg",
+        fuelCapacity: "11 litres",
+        seatHeight: "780 mm",
+        groundClearance: "169 mm"
+      },
+      chassis: {
+        frontSuspension: "43 mm Telescopic Fork (140 mm travel)",
+        rearSuspension: "Linkage-type Monoshock (150 mm travel)",
+        frontBrake: "310 mm Ventilated Disc with double-piston caliper",
+        rearBrake: "270 mm Disc with single-piston caliper",
+        abs: "Dual-Channel ABS",
+        frontTyre: "120/70 R17 (Tubeless)",
+        rearTyre: "160/60 R17 (Tubeless)"
+      },
+      efficiency: {
+        claimedMileage: "29.5 km/l",
+        mileageNote: "Official Manufacturer / Test Cycle Claim (WMTC / ARAI). Real-world mileage may vary depending on riding conditions."
+      }
+    },
 
     // Single chronological timeline of important events
     history: [
@@ -84,13 +116,43 @@ export const DEMO_MOTORCYCLES = [
     registrationNumber: "KA 03 AB 1234",
     status: "Verified Record",
     currentOwner: "Rohan Sharma",
-    engineCapacity: "399 cc",
     color: "Electronic Orange",
     currentOdometer: 14850,
     unit: "km",
 
     documentHash: "3B7E9F1A4C6D8E0B2D4F6A8C0E2B4D6F8A0C2E4B6D8F0A2C4E6B8D72EA8F91C",
     documentName: "Annual Inspection & Service Certificate",
+
+    specifications: {
+      engine: {
+        displacement: "398.7 cc",
+        engineType: "Single-cylinder, 4-stroke, 4-valve DOHC (LC4c)",
+        maxPower: "46 PS (45.3 bhp / 33.8 kW) @ 8,500 rpm",
+        maxTorque: "39 Nm @ 6,500 rpm",
+        transmission: "6-speed manual with PASC slip-and-assist, Quickshifter+",
+        cooling: "Liquid-cooled with curved radiator",
+        fuelType: "Petrol / Gasoline"
+      },
+      dimensions: {
+        kerbWeight: "168.3 kg",
+        fuelCapacity: "15 litres",
+        seatHeight: "800 mm (adjustable to 820 mm)",
+        groundClearance: "151 mm"
+      },
+      chassis: {
+        frontSuspension: "WP APEX 43 mm open-cartridge upside-down fork (150 mm travel)",
+        rearSuspension: "WP APEX separate-piston monoshock (150 mm travel)",
+        frontBrake: "320 mm Disc with radial 4-piston caliper",
+        rearBrake: "240 mm Disc with 2-piston floating caliper",
+        abs: "Bosch 9.3 MP Dual-Channel with Supermoto ABS & Cornering ABS",
+        frontTyre: "110/70 R17",
+        rearTyre: "150/60 R17"
+      },
+      efficiency: {
+        claimedMileage: "28.9 km/l",
+        mileageNote: "Official Manufacturer / Test Cycle Claim (WMTC). Real-world mileage may vary depending on riding conditions."
+      }
+    },
 
     history: [
       {
@@ -141,13 +203,43 @@ export const DEMO_MOTORCYCLES = [
     registrationNumber: "DL 01 AX 5678",
     status: "Verified Record",
     currentOwner: "Ananya R.",
-    engineCapacity: "999 cc",
     color: "M Motorsport Tri-Color",
     currentOdometer: 8900,
     unit: "km",
 
     documentHash: "C4D6F8A0C2E4B6D8F0A2C4E6B8D72EA8F91C3E7B2D4F5A6C8E0B2D4F6A8C0E2B",
     documentName: "BMW Certified Run-in & M Package Log",
+
+    specifications: {
+      engine: {
+        displacement: "999 cc",
+        engineType: "In-line 4-cylinder, 4-stroke, 16 titanium valves with BMW ShiftCam",
+        maxPower: "210 PS (205 bhp / 154 kW) @ 13,750 rpm",
+        maxTorque: "113 Nm @ 11,000 rpm",
+        transmission: "6-speed claw-shifted, anti-hopping clutch, Shift Assistant Pro",
+        cooling: "Water/oil-cooled",
+        fuelType: "Petrol (Premium Unleaded, min 98 RON)"
+      },
+      dimensions: {
+        kerbWeight: "197 kg (M Package: 193.5 kg)",
+        fuelCapacity: "16.5 litres",
+        seatHeight: "824 mm (M Seat: 814 / 849 mm)",
+        groundClearance: "140 mm"
+      },
+      chassis: {
+        frontSuspension: "45 mm Upside-down telescopic fork, DDC dynamic damping control",
+        rearSuspension: "Aluminum swing arm, central shock absorber, full floater pro",
+        frontBrake: "Twin 320 mm disc, 4-piston radial caliper (M Brakes)",
+        rearBrake: "Single 220 mm disc, 1-piston floating caliper",
+        abs: "BMW Motorrad Race ABS Pro (partially integral, slide control)",
+        frontTyre: "120/70 ZR 17",
+        rearTyre: "190/55 ZR 17 (or 200/55 ZR 17 M Wheels)"
+      },
+      efficiency: {
+        claimedMileage: "15.6 km/l (6.4 L/100 km)",
+        mileageNote: "Official Manufacturer / Test Cycle Claim (WMTC). Real-world mileage may vary depending on riding conditions."
+      }
+    },
 
     history: [
       {
@@ -189,13 +281,43 @@ export const DEMO_MOTORCYCLES = [
     registrationNumber: "TN 07 BK 9012",
     status: "Verified Record",
     currentOwner: "Deepak N.",
-    engineCapacity: "398 cc",
     color: "Carnival Red",
     currentOdometer: 5400,
     unit: "km",
 
     documentHash: "D4F6A8C0E2B4D6F8A0C2E4B6D8F0A2C4E6B8D72EA8F91C3E7B2D4F5A6C8E0B2D",
     documentName: "Triumph Scheduled First Service Certificate",
+
+    specifications: {
+      engine: {
+        displacement: "398.15 cc",
+        engineType: "Single-cylinder, 4-valve, DOHC (TR-Series)",
+        maxPower: "40 PS (39.5 bhp / 29.4 kW) @ 8,000 rpm",
+        maxTorque: "37.5 Nm @ 6,500 rpm",
+        transmission: "6-speed with torque-assist clutch",
+        cooling: "Liquid-cooled",
+        fuelType: "Petrol / Gasoline"
+      },
+      dimensions: {
+        kerbWeight: "176 kg",
+        fuelCapacity: "13 litres",
+        seatHeight: "790 mm",
+        groundClearance: "158 mm"
+      },
+      chassis: {
+        frontSuspension: "43 mm Upside Down Big Piston forks (140 mm travel)",
+        rearSuspension: "Gas monoshock RSU with external reservoir, preload adjustable (130 mm travel)",
+        frontBrake: "300 mm fixed disc, four-piston radial caliper",
+        rearBrake: "230 mm fixed disc, floating caliper",
+        abs: "Bosch Dual-Channel ABS",
+        frontTyre: "110/70 R17 (Metzeler Sportec M9RR)",
+        rearTyre: "150/60 R17 (Metzeler Sportec M9RR)"
+      },
+      efficiency: {
+        claimedMileage: "29.4 km/l",
+        mileageNote: "Official Manufacturer / Test Cycle Claim (WMTC). Real-world mileage may vary depending on riding conditions."
+      }
+    },
 
     history: [
       {
